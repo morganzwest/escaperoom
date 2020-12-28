@@ -1,5 +1,6 @@
 import hashlib, uuid, re, mysql.connector, firebase_admin, os
 from colorama import Fore, init
+from firebase_admin import db
 
 
 def error_output(err):

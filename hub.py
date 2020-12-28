@@ -1,6 +1,16 @@
 import db.mzw as mzw
 
-DATABASE = mzw.Firebase(
-    "https://escaperoom-45ff9-default-rtdb.europe-west1.firebasedatabase.app/",
-    "db/escaperoom-45ff9-firebase-adminsdk-4v595-b8517cf303.json"
-)
+
+class CONSTANTScls:
+    def __init__(self):
+        self.DATABASE = {}
+
+        # Private URL key
+        with open("db/prv.lcs") as f:
+            self.url = f.readlines()[0]
+
+    def initialize_databases(self):
+        self.DATABASE = mzw.Firebase(self.url, "db/key.json")
+
+
+CONSTANTS = CONSTANTScls()
