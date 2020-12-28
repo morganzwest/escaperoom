@@ -50,67 +50,6 @@ class Firebase(object):
         ref.update(dict_update)
 
 
-class SQL:
-    def __init__(self, host, user, password, database=""):
-        self.db = mysql.connector.connect(
-            host = host,
-            user = user,
-            password = password,
-            database = database
-        )
-
-        self.cursor = self.db.cursor()
-
-    def execute(self, query: str, val = ""):
-        """
-        Execute the SQL Query
-        :param query: the SQL query needed to execute
-        :param val: any other variable input
-        :return: null
-        """
-        if val == "":
-            self.cursor.execute(query)
-        else:
-            self.cursor.execute(query, val)
-
-    def executemany(self, queries, val):
-        """
-        Execute an array of SQL queries
-        :param queries: array of SQL queries
-        :param val: other variable to input
-        :return: null
-        """
-        self.cursor.executemany(queries, val)
-
-    def commit(self):
-        """
-        Update the database
-        :return: null
-        """
-        self.db.commit()
-
-    def fetch(self):
-        """
-        fetch the results/records from the last execute
-        :return: array of records
-        """
-        return self.cursor.fetchall()
-
-    def rowcount(self):
-        """
-        Get the row count of the record update
-        :return: int
-        """
-        return self.cursor.rowcount()
-
-    def lastrowid(self):
-        """
-        gets the Row ID of the last commit change
-        :return: int
-        """
-        self.cursor.lastrowid()
-
-
 class Password:
     @staticmethod
     def check_password(hashed_password: str, user_password: str):
