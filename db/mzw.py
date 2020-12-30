@@ -1,6 +1,7 @@
-import hashlib, uuid, re, mysql.connector, firebase_admin, os
+import hashlib, uuid, re, mysql.connector, firebase_admin, os, time
 from colorama import Fore, init
 from firebase_admin import db
+import datetime
 
 
 def error_output(err):
@@ -60,6 +61,9 @@ class Password:
         :return: bool (true if same else false)
         """
         # splits the salt so the decrypt can find the original
+        print(hashed_password)
+        print(hashed_password.split(':'))
+
         password, salt = hashed_password.split(':')
         return password == hashlib.sha256(salt.encode() + user_password.encode()).hexdigest()
 
@@ -157,18 +161,28 @@ class Auth:
         password_class = Password()
         password = password_class.hash_password(password) if self.pass_hash else password
 
+        while True:
+            username = input("Username: ").strip()
+
+            if len(username) > 3:
+                break
+            else:
+                print(f"{Fore.RED}Username is too short. Try again.")
+                time.sleep(.4)
+
         if ret:
             return email, password
         else:
             self.database_post(
-                (email, password)
+                email, password, username
             )
 
-    def login_run(self):
+    def login_run(self, email_array):
         i, b = 0, False
         while True:
             i = 0
             usemail = input("Email: ").strip().lower()
+            password = input("Password: ").strip().lower()
             if len(usemail) > 0:
                 i += 1
                 if usemail[-1] != ".":
@@ -182,12 +196,33 @@ class Auth:
                 error_output("Invalid Email")
                 continue
 
-            for email in self.data:
-                if email == usemail:
-                    b = True
+            for obj in email_array:
+                if Password.check_password(obj[1], password) and obj[0] == usemail:
+
+                    # Save account path to file
+                    try:
+                        with open("account_path.xcc", "w") as f:
+                            f.write(str(obj[2]))
+                    except FileNotFoundError:
+                        with open("account_path.xcc", "x") as f:
+                            pass
+                        with open("account_path.xcc", "a") as f:
+                            f.write(str(obj[2]))
+
+                    # Create progress local save
+                    if os.path.isfile(f"/{obj[1]}"):
+                        with open(f"{obj[0]}.ESRS", "a") as f:
+                            f.write(f"# Log # {datetime.datetime.now()}")
+                    else:
+                        with open(f"/{obj[0]}.ESRS", "w") as f:
+                            f.write(f"# User path:{obj[2]}")
+                            f.write(f"# {datetime.datetime.now()}")
+
+                    print(f"{Fore.GREEN}Login Successful!")
                     break
-            if b:
-                error_output("Account with that email does not exist.")
+            else:
+                error_output("Credentials do not match our database.")
+
 
 
     def menu(self):
