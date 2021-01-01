@@ -1,33 +1,36 @@
-import hub
+from libs import hub
 
 hub.check()
 hub.CONSTANTS.initialize_databases()
 
-"""print(f"{hub.Fore.BLUE}\n", hub.CONSTANTS.DATABASE.load("/game/0/name"), f"{hub.Fore.RESET}")
-
-hub.delay_print(
-    hub.CONSTANTS.DATABASE.load("/game/0/parts/intro")
-)"""
-
 
 def create_account(email: str, password: str, username: str):
-    temp = hub.CONSTANTS.DATABASE.load("/users/")
-    string = username + ":" + email.replace(".", "DOT")
-    hub.CONSTANTS.DATABASE.update("/users/", {
-        string: {
-            "billing": "#",
-            "games":
-                {
-                    "paid": "#",
-                    "progress": {
-                        "0": "FILLER"
-                    }
-                },
-            "password": password,
-            "username": username
-        }
-    })
+    while True:
+        try:
+            string = username + ":" + email.replace(".", "DOT")
+            print(string, password, username)
+            hub.CONSTANTS.DATABASE.update("/users/", {
+                string: {
+                    "billing": "#",
+                    "games":
+                        {
+                            "paid": "#",
+                            "progress": {
+                                "0": "FILLER"
+                            }
+                        },
+                    "password": password,
+                    "username": username
+                }
+            })
+            break
+        except:
+            hub.mzw.error_output("Invalid username. Make sure your username does not contain any symbols.")
+            username = input("Username: ")
+            continue
 
+def loggedmenu():
+    pass
 
 def menu():
     Authentication = hub.mzw.Auth()
@@ -67,8 +70,9 @@ def menu():
                 (email, password, f"/users/{key}/")
             )
         # End
-        Authentication.login_run(array)
-
+        hub.CONSTANTS.PATH = Authentication.login_run(array)
+        hub.CONSTANTS.ACCOUNT_DATA = hub.CONSTANTS.DATABASE.load(hub.CONSTANTS.PATH)
+        loggedmenu()
 
 menu()
 hub.time.sleep(50)

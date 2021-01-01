@@ -1,0 +1,10 @@
+Detective, we need your help! ... has been in touch from the town’s museum. The museum has been lucky enough to secure a multi-million pound exhibit from up-and-coming artist ..., but in transit from it’s previous exhibitor, an item was stolen!
+
+There are a few problems that mean the case isn’t as straight forward as we were hoping - the worker in charge of moving the exhibit didn’t take an itinerary of the art, so they’re not sure which piece was stolen. Secondly, ... received a letter from the thief suggesting they are holding the piece for ransom.
+
+Your objectives for this case:
+- discern which piece of art was stolen
+- find and return the stolen art
+- identify the thief
+
+A copy of the cryptic letter from the thief can be found in the notes below:
